@@ -6,7 +6,7 @@ import { NES } from 'jsnes';
 import FrameTimer from '../../utils/FrameTimer';
 import GamepadController from '../../utils/GamepadController';
 import KeyboardController from '../../utils/KeyboardController';
-import Screen from '../Screen/Screen';
+import Screen from '../Screen';
 import Speakers from '../../utils/Speakers';
 
 /*

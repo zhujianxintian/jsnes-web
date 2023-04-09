@@ -1,13 +1,13 @@
-const pFileReader = function (file) {
+const pFileReader = function (file: Blob) {
     return new Promise((resolve, reject) => {
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = resolve;
         reader.readAsBinaryString(file);
     });
 };
 
-const hashFile = function (byteString) {
-    const asHex = (buffer) => {
+const hashFile = function (byteString: string) {
+    const asHex = (buffer: any) => {
         return Array.from(new Uint8Array(buffer))
             .map((b) => b.toString(16).padStart(2, '0'))
             .join('');
@@ -24,12 +24,12 @@ const hashFile = function (byteString) {
 };
 
 const RomLibrary = {
-    getRomInfoByHash: function (hash) {
-        return this.load().find((rom) => rom.hash === hash);
+    getRomInfoByHash: function (hash: any) {
+        return this.load().find((rom: { hash: any }) => rom.hash === hash);
     },
-    save: function (file) {
+    save: function (file: Blob) {
         return pFileReader(file)
-            .then(function (readFile) {
+            .then(function (readFile: any) {
                 const byteString = readFile.target.result;
                 return hashFile(byteString).then((hash) => {
                     return { hash, byteString };
@@ -56,13 +56,16 @@ const RomLibrary = {
     load: function () {
         const localData = localStorage.getItem('savedRomInfo');
         if (!localData) return [];
-        const savedRomInfo = JSON.parse(localStorage.getItem('savedRomInfo'));
+        const savedRomInfo = JSON.parse(localStorage.getItem('savedRomInfo') as any);
         return savedRomInfo || [];
     },
-    delete: function (hash) {
+    delete: function (hash: string) {
         const existingLibrary = this.load();
         localStorage.removeItem('blob-' + hash);
-        localStorage.setItem('savedRomInfo', JSON.stringify(existingLibrary.filter((rom) => rom.hash !== hash)));
+        localStorage.setItem(
+            'savedRomInfo',
+            JSON.stringify(existingLibrary.filter((rom: { hash: any }) => rom.hash !== hash)),
+        );
     },
 };
 

@@ -1,19 +1,35 @@
-export default class GamepadController {
-    constructor(options) {
+interface GamepadControllerOptions {
+    onButtonDown: any;
+
+    onButtonUp: any;
+}
+
+class GamepadController {
+    onButtonDown: any;
+
+    onButtonUp: any;
+
+    gamepadState: any;
+
+    buttonCallback: any;
+
+    gamepadConfig: any;
+
+    constructor(options: GamepadControllerOptions) {
         this.onButtonDown = options.onButtonDown;
         this.onButtonUp = options.onButtonUp;
         this.gamepadState = [];
         this.buttonCallback = null;
     }
 
-    disableIfGamepadEnabled = (callback) => {
-        var self = this;
-        return (playerId, buttonId) => {
+    disableIfGamepadEnabled = (callback: any) => {
+        const self = this;
+        return (playerId: any, buttonId: any) => {
             if (!self.gamepadConfig) {
                 return callback(playerId, buttonId);
             }
 
-            var playerGamepadId = self.gamepadConfig.playerGamepadId;
+            const playerGamepadId = self.gamepadConfig.playerGamepadId;
             if (!playerGamepadId || !playerGamepadId[playerId - 1]) {
                 // allow callback only if player is not associated to any gamepad
                 return callback(playerId, buttonId);
@@ -21,7 +37,7 @@ export default class GamepadController {
         };
     };
 
-    _getPlayerNumberFromGamepad = (gamepad) => {
+    _getPlayerNumberFromGamepad = (gamepad: { id: any }) => {
         if (this.gamepadConfig.playerGamepadId[0] === gamepad.id) {
             return 1;
         }
@@ -34,7 +50,7 @@ export default class GamepadController {
     };
 
     poll = () => {
-        const gamepads = navigator.getGamepads ? navigator.getGamepads() : navigator.webkitGetGamepads();
+        const gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator as any).webkitGetGamepads();
 
         const usedPlayers = [];
 
@@ -132,7 +148,7 @@ export default class GamepadController {
             }
 
             this.gamepadState[gamepadIndex] = {
-                buttons: buttons.map((b) => {
+                buttons: buttons.map((b: { pressed: any; }) => {
                     return { pressed: b.pressed };
                 }),
                 axes: gamepad.axes.slice(0),
@@ -140,11 +156,11 @@ export default class GamepadController {
         }
     };
 
-    promptButton = (f) => {
+    promptButton = (f: (arg0: any) => void) => {
         if (!f) {
             this.buttonCallback = f;
         } else {
-            this.buttonCallback = (buttonInfo) => {
+            this.buttonCallback = (buttonInfo: any) => {
                 this.buttonCallback = null;
                 f(buttonInfo);
             };
@@ -152,7 +168,7 @@ export default class GamepadController {
     };
 
     loadGamepadConfig = () => {
-        var gamepadConfig;
+        let gamepadConfig;
         try {
             gamepadConfig = localStorage.getItem('gamepadConfig');
             if (gamepadConfig) {
@@ -165,7 +181,7 @@ export default class GamepadController {
         this.gamepadConfig = gamepadConfig;
     };
 
-    setGamepadConfig = (gamepadConfig) => {
+    setGamepadConfig = (gamepadConfig: any) => {
         try {
             localStorage.setItem('gamepadConfig', JSON.stringify(gamepadConfig));
             this.gamepadConfig = gamepadConfig;
@@ -175,17 +191,21 @@ export default class GamepadController {
     };
 
     startPolling = () => {
-        if (!(navigator.getGamepads || navigator.webkitGetGamepads)) {
+        if (!(navigator.getGamepads || (navigator as any).webkitGetGamepads)) {
             return { stop: () => {} };
         }
 
         let stopped = false;
+
         const loop = () => {
-            if (stopped) return;
+            if (stopped) {
+                return;
+            }
 
             this.poll();
             requestAnimationFrame(loop);
         };
+
         requestAnimationFrame(loop);
 
         return {
@@ -195,3 +215,5 @@ export default class GamepadController {
         };
     };
 }
+
+export default GamepadController;

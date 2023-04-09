@@ -1,7 +1,25 @@
 const FPS = 60.098;
 
-export default class FrameTimer {
-    constructor(props) {
+interface FrameTimerProps {
+    onGenerateFrame: any;
+
+    onWriteFrame: any;
+}
+
+class FrameTimer {
+    onGenerateFrame: any;
+
+    onWriteFrame: any;
+
+    running: boolean;
+
+    interval: number;
+
+    lastFrameTime: any;
+
+    private _requestID: number | null = null;
+
+    constructor(props: FrameTimerProps) {
         // Run at 60 FPS
         this.onGenerateFrame = props.onGenerateFrame;
         // Run on animation frame
@@ -19,7 +37,9 @@ export default class FrameTimer {
 
     stop() {
         this.running = false;
-        if (this._requestID) window.cancelAnimationFrame(this._requestID);
+        if (this._requestID) {
+            window.cancelAnimationFrame(this._requestID);
+        }
         this.lastFrameTime = false;
     }
 
@@ -32,14 +52,14 @@ export default class FrameTimer {
         this.lastFrameTime += this.interval;
     }
 
-    onAnimationFrame = (time) => {
+    onAnimationFrame = (time: any) => {
         this.requestAnimationFrame();
         // how many ms after 60fps frame time
-        let excess = time % this.interval;
+        const excess = time % this.interval;
 
         // newFrameTime is the current time aligned to 60fps intervals.
         // i.e. 16.6, 33.3, etc ...
-        let newFrameTime = time - excess;
+        const newFrameTime = time - excess;
 
         // first frame, do nothing
         if (!this.lastFrameTime) {
@@ -47,11 +67,11 @@ export default class FrameTimer {
             return;
         }
 
-        let numFrames = Math.round((newFrameTime - this.lastFrameTime) / this.interval);
+        const numFrames = Math.round((newFrameTime - this.lastFrameTime) / this.interval);
 
         // This can happen a lot on a 144Hz display
         if (numFrames === 0) {
-            //console.log("WOAH, no frames");
+            // console.log("WOAH, no frames");
             return;
         }
 
@@ -63,12 +83,15 @@ export default class FrameTimer {
         // onAnimationFrame call.
         // additional frames are generated but not displayed
         // until next frame draw
-        let timeToNextFrame = this.interval - excess;
+        const timeToNextFrame = this.interval - excess;
         for (let i = 1; i < numFrames; i++) {
-            setTimeout(() => {
-                this.generateFrame();
-            }, (i * timeToNextFrame) / numFrames);
+            const timeout = (i * timeToNextFrame) / numFrames;
+            setTimeout(() => this.generateFrame(), timeout);
         }
-        if (numFrames > 1) console.log('SKIP', numFrames - 1, this.lastFrameTime);
+        if (numFrames > 1) {
+            console.log('SKIP', numFrames - 1, this.lastFrameTime);
+        }
     };
 }
+
+export default FrameTimer;

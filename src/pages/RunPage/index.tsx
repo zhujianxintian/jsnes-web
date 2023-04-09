@@ -3,18 +3,25 @@ import { Button, Progress } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 import config from '../../utils/config';
-import ControlsModal from '../../components/ControlsModal/ControlsModal';
-import Emulator from '../../components/Emulator/Emulator';
+import ControlsModal from '../../components/ControlsModal';
+import Emulator from '../../components/Emulator';
 import RomLibrary from '../../utils/RomLibrary';
 import { loadBinary } from '../../utils/utils';
 
-import './RunPage.css';
+import './index.scss';
 
 /*
  * The UI for the emulator. Also responsible for loading ROM from URL or file.
  */
-class RunPage extends Component {
-    constructor(props) {
+class RunPage extends Component<any, any> {
+    navbar!: HTMLElement | null;
+    screenContainer!: HTMLDivElement | null;
+    emulator!: Emulator | null;
+    currentRequest: any;
+
+    state: any;
+
+    constructor(props: any) {
         super(props);
         this.state = {
             romName: null,
@@ -100,11 +107,11 @@ class RunPage extends Component {
                             <ControlsModal
                                 isOpen={this.state.controlsModalOpen}
                                 toggle={this.toggleControlsModal}
-                                keys={this.emulator.keyboardController.keys}
-                                setKeys={this.emulator.keyboardController.setKeys}
-                                promptButton={this.emulator.gamepadController.promptButton}
-                                gamepadConfig={this.emulator.gamepadController.gamepadConfig}
-                                setGamepadConfig={this.emulator.gamepadController.setGamepadConfig}
+                                keys={this.emulator!.keyboardController!.keys}
+                                setKeys={this.emulator!.keyboardController!.setKeys}
+                                promptButton={this.emulator!.gamepadController!.promptButton}
+                                gamepadConfig={this.emulator!.gamepadController!.gamepadConfig}
+                                setGamepadConfig={this.emulator!.gamepadController!.setGamepadConfig}
                             />
                         )}
                     </div>
@@ -131,6 +138,7 @@ class RunPage extends Component {
             const slug = this.props.match.params.slug;
             const isLocalROM = /^local-/.test(slug);
             const romHash = slug.split('-')[1];
+            // @ts-ignore
             const romInfo = isLocalROM ? RomLibrary.getRomInfoByHash(romHash) : config.ROMS[slug];
 
             if (!romInfo) {
@@ -168,13 +176,13 @@ class RunPage extends Component {
         }
     };
 
-    handleProgress = (e) => {
+    handleProgress = (e: { lengthComputable: any; loaded: number; total: number }) => {
         if (e.lengthComputable) {
             this.setState({ loadedPercent: (e.loaded / e.total) * 100 });
         }
     };
 
-    handleLoaded = (data) => {
+    handleLoaded = (data: string | ArrayBuffer | null | undefined) => {
         this.setState({ running: true, loading: false, romData: data });
     };
 
@@ -183,8 +191,8 @@ class RunPage extends Component {
     };
 
     layout = () => {
-        let navbarHeight = parseFloat(window.getComputedStyle(this.navbar).height);
-        this.screenContainer.style.height = `${window.innerHeight - navbarHeight}px`;
+        let navbarHeight = parseFloat(window.getComputedStyle(this.navbar!).height);
+        this.screenContainer!.style.height = `${window.innerHeight - navbarHeight}px`;
         if (this.emulator) {
             this.emulator.fitInParent();
         }

@@ -22,7 +22,10 @@ const KEYS = {
 };
 
 export default class KeyboardController {
-    constructor(options) {
+    onButtonDown: any;
+    onButtonUp: any;
+    keys: any;
+    constructor(options: { onButtonDown: any; onButtonUp: any }) {
         this.onButtonDown = options.onButtonDown;
         this.onButtonUp = options.onButtonUp;
     }
@@ -41,7 +44,7 @@ export default class KeyboardController {
         this.keys = keys || KEYS;
     };
 
-    setKeys = (newKeys) => {
+    setKeys = (newKeys: any) => {
         try {
             localStorage.setItem('keys', JSON.stringify(newKeys));
             this.keys = newKeys;
@@ -50,7 +53,7 @@ export default class KeyboardController {
         }
     };
 
-    handleKeyDown = (e) => {
+    handleKeyDown = (e: { keyCode: string | number; preventDefault: () => void }) => {
         var key = this.keys[e.keyCode];
         if (key) {
             this.onButtonDown(key[0], key[1]);
@@ -58,7 +61,7 @@ export default class KeyboardController {
         }
     };
 
-    handleKeyUp = (e) => {
+    handleKeyUp = (e: { keyCode: string | number; preventDefault: () => void }) => {
         var key = this.keys[e.keyCode];
         if (key) {
             this.onButtonUp(key[0], key[1]);
@@ -66,7 +69,7 @@ export default class KeyboardController {
         }
     };
 
-    handleKeyPress = (e) => {
+    handleKeyPress = (e: { preventDefault: () => void }) => {
         e.preventDefault();
     };
 }

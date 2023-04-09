@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { StaticRouter, Route } from 'react-router-dom';
-import ListPage from './ListPage';
+import ListPage from '.';
 
 describe('ListPage', () => {
     it('renders without crashing', () => {

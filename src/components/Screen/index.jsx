@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Screen.css';
+import './index.scss';
 
 const SCREEN_WIDTH = 256;
 const SCREEN_HEIGHT = 240;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import { Controller } from 'jsnes';
-import ControlMapperRow from '../ControlMapperRow/ControlMapperRow';
+import ControlMapperRow from '../ControlMapperRow';
 
 const GAMEPAD_ICON = '../img/nes_controller.png';
 const KEYBOARD_ICON = '../img/keyboard.png';

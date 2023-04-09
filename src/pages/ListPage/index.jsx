@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import './ListPage.css';
 import { ListGroup } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import config from '../../utils/config';
-
 import RomLibrary from '../../utils/RomLibrary';
+import './index.scss';
 
 class ListPage extends Component {
     constructor(props) {

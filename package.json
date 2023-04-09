@@ -23,8 +23,11 @@
         "ringbufferjs": "^2.0.0"
     },
     "devDependencies": {
+        "@types/node": "^18.15.11",
         "@types/react": "^18.0.28",
         "@types/react-dom": "^18.0.11",
+        "@types/react-router-dom": "5.3.3",
+        "@types/ringbufferjs": "^1.1.0",
         "canvas": "^2.11.0",
         "prettier": "^2.8.4",
         "prettier-check": "^2.0.0",
