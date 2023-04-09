@@ -49,3 +49,10 @@ const config = {
 ```
 
 Then, add the ROM file as `public/roms/myrom/myrom.nes`. The ROM should now be available to play at http://localhost:3000/run/myrom
+
+```typescript
+/**
+ * package.json 中只有 react-router-dom, bootstrap 和 reactstrap 没有升级到最新版本
+ * 因为都或多或少有点不兼容
+ */
+```
