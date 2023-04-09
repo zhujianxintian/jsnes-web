@@ -1,5 +1,5 @@
-@import "node_modules/bootstrap/scss/functions.scss";
-@import "node_modules/bootstrap/scss/variables.scss";
+@import 'node_modules/bootstrap/scss/functions.scss';
+@import 'node_modules/bootstrap/scss/variables.scss';
 
 // Bootstrap customization, where we're supposed to
 $enable-rounded: false;
@@ -12,9 +12,12 @@ $link-decoration: underline;
 $link-hover-color: $gray-500;
 $link-hover-decoration: underline;
 
-$theme-colors: map-merge($theme-colors, (
-  primary: $white,
-));
+$theme-colors: map-merge(
+    $theme-colors,
+    (
+        primary: $white,
+    )
+);
 
 $list-group-bg: $black;
 $list-group-border-color: $gray-300;
@@ -28,40 +31,42 @@ $modal-footer-border-width: 0;
 $close-color: $white;
 $close-text-shadow: none;
 
-@import "node_modules/bootstrap/scss/bootstrap.scss";
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
 
 // Bootstrap customization, where we're not supposed to
 
 // Fix hover color being white
 @each $color, $value in $theme-colors {
-  .btn-outline-#{$color} {
-    @include button-outline-variant($value, $black);
-  }
+    .btn-outline-#{$color} {
+        @include button-outline-variant($value, $black);
+    }
 }
 
-html, body, #root {
-  height: 100%;
+html,
+body,
+#root {
+    height: 100%;
 }
 
 .nav-link {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .list-group-item {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .table thead th {
-  border-bottom: 2px solid white;
-  border-top: none;
+    border-bottom: 2px solid white;
+    border-top: none;
 }
 
 .close {
-  opacity: 1;
+    opacity: 1;
 }
 
 img.controller-icon {
-	width: 40px;
-	height: 40px;
-  margin-top: -20px;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
 }
